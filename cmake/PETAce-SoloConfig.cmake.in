@@ -1,0 +1,81 @@
+# Copyright 2023 TikTok Pte. Ltd.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+macro(solo_find_dependency dep)
+    find_dependency(${dep})
+    if(NOT ${dep}_FOUND)
+        if(NOT PETAce-Solo_FIND_QUIETLY)
+            message(WARNING "Could not find dependency `${dep}` required by this configuration")
+        endif()
+        set(PETAce-Solo_FOUND FALSE)
+        return()
+    endif()
+endmacro()
+
+set(PETAce-Solo_FOUND FALSE)
+set(PETAce-Solo_STATIC_FOUND FALSE)
+set(PETAce-Solo_SHARED_FOUND FALSE)
+
+set(SOLO_DEBUG @SOLO_DEBUG@)
+set(SOLO_CARRY_OPENSSL @SOLO_CARRY_OPENSSL@)
+
+# Add the current directory to the module search path
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
+
+set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+solo_find_dependency(Threads)
+if (NOT SOLO_CARRY_OPENSSL)
+    solo_find_dependency(OpenSSL)
+endif()
+
+include(${CMAKE_CURRENT_LIST_DIR}/PETAce-SoloTargets.cmake)
+
+if(TARGET PETAce-Solo::solo)
+    set(PETAce-Solo_FOUND TRUE)
+    set(PETAce-Solo_STATIC_FOUND TRUE)
+endif()
+
+if(TARGET PETAce-Solo::solo_shared)
+    set(PETAce-Solo_FOUND TRUE)
+    set(PETAce-Solo_SHARED_FOUND TRUE)
+endif()
+
+if(PETAce-Solo_FOUND)
+    if(NOT PETAce-Solo_FIND_QUIETLY)
+        message(STATUS "PETAce-Solo -> Version ${PETAce-Solo_VERSION} detected")
+    endif()
+    if(SOLO_DEBUG AND NOT PETAce-Solo_FIND_QUIETLY)
+        message(STATUS "Performance warning: PETAce-Solo compiled in debug mode")
+    endif()
+    set(PETAce-Solo_TARGETS_AVAILABLE "PETAce-Solo -> Targets available:")
+
+    if(PETAce-Solo_STATIC_FOUND)
+        string(APPEND PETAce-Solo_TARGETS_AVAILABLE " PETAce-Solo::solo")
+    endif()
+    if(PETAce-Solo_SHARED_FOUND)
+        string(APPEND PETAce-Solo_TARGETS_AVAILABLE " PETAce-Solo::solo_shared")
+    endif()
+    if(NOT PETAce-Solo_FIND_QUIETLY)
+        message(STATUS ${PETAce-Solo_TARGETS_AVAILABLE})
+    endif()
+else()
+    if(NOT PETAce-Solo_FIND_QUIETLY)
+        message(STATUS "PETAce-Solo -> NOT FOUND")
+    endif()
+endif()
