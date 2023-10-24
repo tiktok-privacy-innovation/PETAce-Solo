@@ -43,6 +43,9 @@ solo_find_dependency(Threads)
 if (NOT SOLO_CARRY_OPENSSL)
     solo_find_dependency(OpenSSL)
 endif()
+if (SOLO_USE_IPCL)
+    solo_find_dependency(IPCL)
+endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/PETAce-SoloTargets.cmake)
 

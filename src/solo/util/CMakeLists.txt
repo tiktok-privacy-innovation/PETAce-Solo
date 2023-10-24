@@ -16,6 +16,7 @@
 set(SOLO_SOURCE_FILES ${SOLO_SOURCE_FILES}
     ${CMAKE_CURRENT_LIST_DIR}/blake2b-ref.c
     ${CMAKE_CURRENT_LIST_DIR}/blake2xb-ref.c
+    ${CMAKE_CURRENT_LIST_DIR}/hash_table_entry.cpp
 )
 
 # Add header files for installation
@@ -24,6 +25,7 @@ install(
         ${CMAKE_CURRENT_LIST_DIR}/blake2.h
         ${CMAKE_CURRENT_LIST_DIR}/blake2-impl.h
         ${CMAKE_CURRENT_LIST_DIR}/defines.h
+        ${CMAKE_CURRENT_LIST_DIR}/hash_table_entry.h
     DESTINATION
         ${SOLO_INCLUDES_INSTALL_DIR}/solo/util
 )

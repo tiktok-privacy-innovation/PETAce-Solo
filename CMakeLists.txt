@@ -31,7 +31,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "Build type (CMAKE_BUILD_TYPE): ${CMAKE_BUILD_TYPE}")
 
-project(SOLO VERSION 0.1.0 LANGUAGES CXX C)
+project(SOLO VERSION 0.2.0 LANGUAGES CXX C)
 
 ########################
 # Global configuration #
@@ -171,6 +171,11 @@ set(SOLO_BUILD_DEPS_OPTION_STR "Automatically download and build unmet dependenc
 option(SOLO_BUILD_DEPS ${SOLO_BUILD_DEPS_OPTION_STR} ON)
 message(STATUS "SOLO_BUILD_DEPS: ${SOLO_BUILD_DEPS}")
 
+# [OPTION] SOLO_USE_IPCL (default: OFF)
+set(SOLO_USE_IPCL_OPTION_STR "Use IPCL")
+option(SOLO_USE_IPCL ${SOLO_USE_IPCL_OPTION_STR} OFF)
+message(STATUS "SOLO_USE_IPCL: ${SOLO_USE_IPCL}")
+
 if(SOLO_BUILD_DEPS)
     include(FetchContent)
     mark_as_advanced(FETCHCONTENT_BASE_DIR)
@@ -192,6 +197,19 @@ else()
         set(SOLO_BUILD_OPENSSL TRUE)
     else()
         message(FATAL_ERROR "OpenSSL: not found, please download and install manually")
+    endif()
+endif()
+
+# Intel Paillier Cryptosystem Library
+if(SOLO_USE_IPCL)
+    find_package(IPCL QUIET REQUIRED)
+    if(IPCL_FOUND)
+        message(STATUS "IPCL: found")
+        if (TARGET ipcl AND NOT TARGET IPCL::ipcl)
+            add_library(IPCL::ipcl ALIAS ipcl)
+        endif()
+    else()
+        message(FATAL_ERROR "IPCL: not found, please download and install manually")
     endif()
 endif()
 
@@ -254,6 +272,9 @@ if(NOT SOLO_BUILD_SHARED_LIBS)
         set(SOLO_CARRY_OPENSSL FALSE)
     endif()
 
+    if(SOLO_USE_IPCL)
+        target_link_libraries(solo PUBLIC IPCL::ipcl)
+    endif()
     target_link_libraries(solo PUBLIC Threads::Threads)
 
 # Build only a shared library
@@ -287,6 +308,9 @@ else()
     endif()
     set(SOLO_CARRY_OPENSSL FALSE)
 
+    if(SOLO_USE_IPCL)
+        target_link_libraries(solo_shared PUBLIC IPCL::ipcl)
+    endif()
     target_link_libraries(solo_shared PUBLIC Threads::Threads)
 endif()
 

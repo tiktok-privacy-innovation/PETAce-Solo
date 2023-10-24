@@ -14,19 +14,25 @@
 
 # Source files in this directory
 set(SOLO_SOURCE_FILES ${SOLO_SOURCE_FILES}
+    ${CMAKE_CURRENT_LIST_DIR}/ahe_paillier.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/cuckoo_hashing.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ec_openssl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hash.cpp
     ${CMAKE_CURRENT_LIST_DIR}/prng.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sampling.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/simple_hashing.cpp
 )
 
 # Add header files for installation
 install(
     FILES
+        ${CMAKE_CURRENT_LIST_DIR}/ahe_paillier.h
+        ${CMAKE_CURRENT_LIST_DIR}/cuckoo_hashing.h
         ${CMAKE_CURRENT_LIST_DIR}/ec_openssl.h
         ${CMAKE_CURRENT_LIST_DIR}/hash.h
         ${CMAKE_CURRENT_LIST_DIR}/prng.h
         ${CMAKE_CURRENT_LIST_DIR}/sampling.h
+        ${CMAKE_CURRENT_LIST_DIR}/simple_hashing.h
         ${CMAKE_CURRENT_LIST_DIR}/solo.h
     DESTINATION
         ${SOLO_INCLUDES_INSTALL_DIR}/solo

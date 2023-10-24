@@ -8,6 +8,8 @@ PETAce-Solo implements or wraps the following primitives that involves only one 
 - Psuedo-random number generators based on: SHAKE_128, BLAKE2Xb, and AES_ECB_CTR.
 - Sampling of bytes, 32-bit unsigned integers, and 64-bit unsigned integers from the uniform distribution.
 - Prime field elliptic curve group arithmetics including hash-to-curve.
+- Hashing tables: Cuckoo hashing and simple hashing.
+- Partially homomorphic encryption: the Paillier cryptosystem.
 
 ## Requirements
 
@@ -23,6 +25,7 @@ PETAce-Solo implements or wraps the following primitives that involves only one 
 |--------------------------------------------------------|----------------|------------------------|
 | [GoogleTest](https://github.com/google/googletest)     | 1.12.1         | For running tests      |
 | [GoogleBenchmark](https://github.com/google/benchmark) | 1.6.1          | For running benchmarks |
+| [Intel Paillier Cryptosystem Library](https://github.com/intel/pailliercryptolib) | 495beaad1f6e70741f2b5cf1279cb919fd66d894 | For partially homomorphic encryption |
 
 ## Building PETAce-Solo
 
@@ -45,6 +48,16 @@ Output binaries can be found in `build/lib/` and `build/bin/` directories.
 | `SOLO_BUILD_EXAMPLE`     | ON/OFF        | ON      | Build C++ example if set to ON.                     |
 | `SOLO_BUILD_TEST`        | ON/OFF        | ON      | Build C++ test if set to ON.                        |
 | `SOLO_BUILD_DEPS`        | ON/OFF        | ON      | Download and build unmet dependencies if set to ON. |
+| `SOLO_USE_IPCL`          | ON/OFF        | OFF     | Add PHE and depends on IPCL if set to ON.           |
+
+### Adding Partially Homomorphic Encryption
+
+Follow instructions of [Intel Paillier Cryptosystem Library](https://github.com/intel/pailliercryptolib) and install it to `${IPCL_INSTALL_DIR}`.
+We recommend the commit `495beaad1f6e70741f2b5cf1279cb919fd66d894` instead of v2.0.0.
+Build PETAce-Solo library with extra configuration:
+```bash
+cmake -S . -B build -DSOLO_USE_IPCL=ON -DIPCL_DIR=${IPCL_INSTALL_DIR}/lib/cmake/ipcl-2.0.0
+```
 
 ## Contribution
 
@@ -62,13 +75,13 @@ This project is licensed under the [Apache-2.0 License](LICENSE).
 
 To cite PETAce in academic papers, please use the following BibTeX entries.
 
-### Version 0.1.0
+### Version 0.2.0
 
 ```tex
     @misc{petace,
-        title = {PETAce (release 0.1.0)},
+        title = {PETAce (release 0.2.0)},
         howpublished = {\url{https://github.com/tiktok-privacy-innovation/PETAce}},
-        month = July,
+        month = Oct,
         year = 2023,
         note = {TikTok Pte. Ltd.},
         key = {PETAce}

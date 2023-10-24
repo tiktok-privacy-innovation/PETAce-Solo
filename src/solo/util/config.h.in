@@ -34,4 +34,4 @@
 #cmakedefine SOLO_USE_AES_INTRIN
 
 // Third-party dependencies
-#cmakedefine SOLO_USE_ZLIB
+#cmakedefine SOLO_USE_IPCL

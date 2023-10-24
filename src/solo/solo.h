@@ -14,7 +14,10 @@
 
 #pragma once
 
+#include "solo/ahe_paillier.h"
+#include "solo/cuckoo_hashing.h"
 #include "solo/ec_openssl.h"
 #include "solo/hash.h"
 #include "solo/prng.h"
 #include "solo/sampling.h"
+#include "solo/simple_hashing.h"

@@ -14,13 +14,13 @@
 
 cmake_minimum_required(VERSION 3.14)
 
-project(SOLOBench VERSION 0.1.0 LANGUAGES CXX)
+project(SOLOBench VERSION 0.2.0 LANGUAGES CXX)
 
 # If not called from root CMakeLists.txt
 if(NOT DEFINED SOLO_BUILD_BENCH)
     set(SOLO_BUILD_BENCH ON)
 
-    find_package(PETAce-Solo 0.1.0 EXACT REQUIRED)
+    find_package(PETAce-Solo 0.2.0 EXACT REQUIRED)
 
     # Must define these variables and include macros
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
@@ -74,9 +74,9 @@ if(SOLO_BUILD_BENCH)
     add_executable(solo_bench ${SOLO_BENCH_FILES})
 
     if(TARGET PETAce-Solo::solo)
-        target_link_libraries(solo_bench PRIVATE PETAce-Solo::solo benchmark::benchmark)
+        target_link_libraries(solo_bench PRIVATE PETAce-Solo::solo benchmark::benchmark m)
     elseif(TARGET PETAce-Solo::solo_shared)
-        target_link_libraries(solo_bench PRIVATE PETAce-Solo::solo_shared benchmark::benchmark)
+        target_link_libraries(solo_bench PRIVATE PETAce-Solo::solo_shared benchmark::benchmark m)
     else()
         message(FATAL_ERROR "Cannot find target PETAce-Solo::solo or PETAce-Solo::solo_shared")
     endif()

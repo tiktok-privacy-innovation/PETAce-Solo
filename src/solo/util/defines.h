@@ -28,6 +28,33 @@ using Byte = std::byte;
 namespace petace {
 namespace solo {
 enum class Byte : unsigned char {};
+
+constexpr Byte operator|(Byte l, Byte r) noexcept {
+    return static_cast<Byte>(static_cast<unsigned char>(l) | static_cast<unsigned char>(r));
+}
+
+constexpr Byte operator^(Byte l, Byte r) noexcept {
+    return static_cast<Byte>(static_cast<unsigned char>(l) ^ static_cast<unsigned char>(r));
+}
+
+constexpr Byte operator&(Byte l, Byte r) noexcept {
+    return static_cast<Byte>(static_cast<unsigned char>(l) & static_cast<unsigned char>(r));
+}
+
+constexpr Byte& operator|=(Byte& l, Byte r) noexcept {
+    l = l | r;
+    return l;
+}
+
+constexpr Byte& operator^=(Byte& l, Byte r) noexcept {
+    l = l ^ r;
+    return l;
+}
+
+constexpr Byte& operator&=(Byte& l, Byte r) noexcept {
+    l = l & r;
+    return l;
+}
 }  // namespace solo
 }  // namespace petace
 #endif

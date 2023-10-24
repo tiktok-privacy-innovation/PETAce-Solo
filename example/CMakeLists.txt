@@ -14,14 +14,14 @@
 
 cmake_minimum_required(VERSION 3.14)
 
-project(SOLOExample VERSION 0.1.0 LANGUAGES CXX)
+project(SOLOExample VERSION 0.2.0 LANGUAGES CXX)
 
 # If not called from root CMakeLists.txt
 if(NOT DEFINED SOLO_BUILD_EXAMPLE)
     set(SOLO_BUILD_EXAMPLE ON)
 
     # Import PETAce-Solo
-    find_package(PETAce-Solo 0.1.0 EXACT REQUIRED)
+    find_package(PETAce-Solo 0.2.0 EXACT REQUIRED)
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 endif()
