@@ -144,7 +144,11 @@ PRNGFactory::PRNGFactory(petace::solo::PRNGScheme scheme, std::size_t seed_byte_
     if (seed_byte_count == 0) {
         throw std::invalid_argument("seed_byte_count is zero");
     }
-    if (scheme != PRNGScheme::SHAKE_128 && scheme != PRNGScheme::BLAKE2Xb && scheme != PRNGScheme::AES_ECB_CTR) {
+    if (scheme != PRNGScheme::SHAKE_128 && scheme != PRNGScheme::BLAKE2Xb
+#ifdef SOLO_USE_AES_INTRIN
+            && scheme != PRNGScheme::AES_ECB_CTR
+#endif
+    ) {
         throw std::invalid_argument("unsupported PRNGScheme");
     }
 #ifdef SOLO_USE_AES_INTRIN

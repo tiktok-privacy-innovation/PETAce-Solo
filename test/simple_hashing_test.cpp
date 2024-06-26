@@ -59,7 +59,7 @@ TEST(SimpleHashingTest, Default) {
         auto num_of_elements_in_bins = simple_hash.get_num_of_elements_in_bins();
         std::size_t sum_elements = 0;
         std::for_each(num_of_elements_in_bins.begin(), num_of_elements_in_bins.end(),
-                [&sum_elements](int n) { sum_elements += n; });
+                [&sum_elements](std::size_t n) { sum_elements += n; });
         ASSERT_EQ(sum_elements, 3 * 1024);
         simple_hash.insert(elements[0]);
     }
@@ -83,7 +83,7 @@ TEST(SimpleHashingTest, Default) {
         auto num_of_elements_in_bins = simple_hash.get_num_of_elements_in_bins();
         std::size_t sum_elements = 0;
         std::for_each(num_of_elements_in_bins.begin(), num_of_elements_in_bins.end(),
-                [&sum_elements](int n) { sum_elements += n; });
+                [&sum_elements](std::size_t n) { sum_elements += n; });
         ASSERT_EQ(sum_elements, 3 * 1024);
         simple_hash.insert(elements[0]);
     }
@@ -107,7 +107,7 @@ TEST(SimpleHashingTest, Default) {
         auto num_of_elements_in_bins = simple_hash.get_num_of_elements_in_bins();
         std::size_t sum_elements = 0;
         std::for_each(num_of_elements_in_bins.begin(), num_of_elements_in_bins.end(),
-                [&sum_elements](int n) { sum_elements += n; });
+                [&sum_elements](std::size_t n) { sum_elements += n; });
         ASSERT_EQ(sum_elements, 3 * 1024);
         simple_hash.insert(elements[0]);
     }

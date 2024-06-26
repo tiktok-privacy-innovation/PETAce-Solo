@@ -199,7 +199,7 @@ std::vector<bool> CuckooHashing<item_byte_count>::obtain_bin_occupancy() const n
 
 template <std::size_t item_byte_count>
 std::vector<std::size_t> CuckooHashing<item_byte_count>::get_num_of_elements_in_bins() const noexcept {
-    std::vector<std::uint64_t> num_elements_in_bins(hash_table_.size(), 0);
+    std::vector<std::size_t> num_elements_in_bins(hash_table_.size(), 0);
     for (std::size_t i = 0; i < hash_table_.size(); ++i) {
         if (!hash_table_.at(i).is_empty()) {
             ++num_elements_in_bins.at(i);
@@ -225,7 +225,11 @@ CuckooHashing<item_byte_count>::CuckooHashing(double epsilon, std::size_t num_of
         seed_ = seed;
     }
 
+#ifdef SOLO_USE_AES_INTRIN
     solo::PRNGFactory prng_factory(solo::PRNGScheme::AES_ECB_CTR);
+#else
+    solo::PRNGFactory prng_factory(solo::PRNGScheme::BLAKE2Xb);
+#endif
     generator_ = prng_factory.create(seed_);
 }
 

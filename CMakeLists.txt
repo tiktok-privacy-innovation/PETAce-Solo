@@ -31,7 +31,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "Build type (CMAKE_BUILD_TYPE): ${CMAKE_BUILD_TYPE}")
 
-project(SOLO VERSION 0.2.0 LANGUAGES CXX C)
+project(SOLO VERSION 0.3.0 LANGUAGES CXX C)
 
 ########################
 # Global configuration #
@@ -101,15 +101,15 @@ set(SOLO_THIRDPARTY_INCLUDES_INSTALL_DIR ${SOLO_INCLUDES_INSTALL_DIR}/thirdparty
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY OFF)
 
 # Supported target operating systems are Linux and macOS.
-if (NOT DEFINED LINUX)
+if(NOT DEFINED LINUX)
     if (UNIX AND NOT APPLE AND NOT CYGWIN AND NOT MINGW)
         set(LINUX ON)
     endif()
 endif()
-if (UNIX AND APPLE)
+if(UNIX AND APPLE)
     set(MACOS ON)
 endif()
-if (NOT LINUX AND NOT MACOS)
+if(NOT LINUX AND NOT MACOS)
     message(FATAL_ERROR "Supported target operating systems are Linux and macOS")
 endif()
 
@@ -139,13 +139,13 @@ CHECK_CXX_SOURCE_RUNS("
     SOLO_AMD64
 )
 set(CMAKE_REQUIRED_QUIET ${CMAKE_REQUIRED_QUIET_OLD})
-if (NOT SOLO_AMD64 AND NOT SOLO_ARM64)
+if(NOT SOLO_AMD64 AND NOT SOLO_ARM64)
     message(FATAL_ERROR "Supported target architectures are x86_64 and arm64")
 endif()
 
 # AES, SSE, and AVX
 CHECK_INCLUDE_FILE_CXX("wmmintrin.h" SOLO_USE_AES_INTRIN)
-if (SOLO_USE_AES_INTRIN)
+if(SOLO_USE_AES_INTRIN)
     add_compile_options(-msse4.2 -mavx -maes)
 endif()
 
@@ -157,8 +157,6 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND SOLO_ENABLE_GCOV)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
     set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -fprofile-arcs -ftest-coverage -lgcov")
 endif()
-
-set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_LINK_EXECUTABLE} -ldl -lrt")
 
 #########################
 # External dependencies #
@@ -211,6 +209,9 @@ if(SOLO_USE_IPCL)
     else()
         message(FATAL_ERROR "IPCL: not found, please download and install manually")
     endif()
+else()
+    solo_fetch_thirdparty_content(ExternalGMP)
+    set(SOLO_BUILD_GMP TRUE CACHE BOOL "" FORCE)
 endif()
 
 # Require Threads::Threads
@@ -218,6 +219,18 @@ if(NOT TARGET Threads::Threads)
     set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
     set(THREADS_PREFER_PTHREAD_FLAG TRUE)
     find_package(Threads REQUIRED)
+endif()
+
+if(NOT SOLO_USE_IPCL)
+    # OpenMP::OpenMP_CXX
+    if(NOT TARGET OpenMP::OpenMP_CXX)
+        find_package(OpenMP REQUIRED)
+        if(NOT OpenMP_FOUND)
+            message(FATAL_ERROR "OpenMP: not found")
+        else()
+            message(STATUS "OpenMP: found")
+        endif()
+    endif()
 endif()
 
 ####################
@@ -274,6 +287,13 @@ if(NOT SOLO_BUILD_SHARED_LIBS)
 
     if(SOLO_USE_IPCL)
         target_link_libraries(solo PUBLIC IPCL::ipcl)
+    else()
+        add_dependencies(solo gmpxx gmp)
+        target_include_directories(solo PUBLIC $<BUILD_INTERFACE:${GMP_INCLUDE_DIR}>)
+        solo_combine_archives(solo gmpxx)
+        solo_combine_archives(solo gmp)
+        target_link_libraries(solo PUBLIC OpenMP::OpenMP_CXX)
+        set(SOLO_CARRY_GMP TRUE)
     endif()
     target_link_libraries(solo PUBLIC Threads::Threads)
 
@@ -310,6 +330,11 @@ else()
 
     if(SOLO_USE_IPCL)
         target_link_libraries(solo_shared PUBLIC IPCL::ipcl)
+    else()
+        add_dependencies(solo_shared gmpxx_shared gmp_shared)
+        target_include_directories(solo_shared PUBLIC $<BUILD_INTERFACE:${GMP_INCLUDE_DIR}>)
+        target_link_libraries(solo_shared PUBLIC gmpxx_shared gmp_shared OpenMP::OpenMP_CXX)
+        set(SOLO_CARRY_GMP FALSE)
     endif()
     target_link_libraries(solo_shared PUBLIC Threads::Threads)
 endif()
@@ -368,6 +393,16 @@ if(SOLO_BUILD_DEPS)
         install(
             DIRECTORY ${OPENSSL_INCLUDE_DIR}
             DESTINATION ${SOLO_THIRDPARTY_INCLUDES_INSTALL_DIR}/openssl)
+    endif()
+    if(SOLO_BUILD_GMP)
+        if(SOLO_BUILD_SHARED_LIBS)
+            install(
+                FILES ${GMP_C_SHARED_LIBRARY} ${GMP_CXX_SHARED_LIBRARY}
+                DESTINATION ${CMAKE_INSTALL_LIBDIR})
+        endif()
+        install(
+            FILES ${GMP_INCLUDE_DIR}/gmp.h ${GMP_INCLUDE_DIR}/gmpxx.h
+            DESTINATION ${SOLO_THIRDPARTY_INCLUDES_INSTALL_DIR})
     endif()
 endif()
 

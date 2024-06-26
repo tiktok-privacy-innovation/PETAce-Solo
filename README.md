@@ -20,6 +20,7 @@ PETAce-Solo implements or wraps the following primitives that involves only one 
 | Required dependency                           | Tested version | Use                      |
 |-----------------------------------------------|----------------|--------------------------|
 | [OpenSSL](https://github.com/openssl/openssl) | 1.1.1          | Cryptographic primitives |
+| [GMP](https://gmplib.org)                     | 6.3.0          | Bignumer operations for GMP-based Paillier|
 
 | Optional dependency                                    | Tested version | Use                    |
 |--------------------------------------------------------|----------------|------------------------|
@@ -48,13 +49,16 @@ Output binaries can be found in `build/lib/` and `build/bin/` directories.
 | `SOLO_BUILD_EXAMPLE`     | ON/OFF        | ON      | Build C++ example if set to ON.                     |
 | `SOLO_BUILD_TEST`        | ON/OFF        | ON      | Build C++ test if set to ON.                        |
 | `SOLO_BUILD_DEPS`        | ON/OFF        | ON      | Download and build unmet dependencies if set to ON. |
-| `SOLO_USE_IPCL`          | ON/OFF        | OFF     | Add PHE and depends on IPCL if set to ON.           |
+| `SOLO_USE_IPCL`          | ON/OFF        | OFF     | BUILD IPCL-based PHE if set to ON, GMP-based PHE if set to off|
 
 ### Adding Partially Homomorphic Encryption
 
-Follow instructions of [Intel Paillier Cryptosystem Library](https://github.com/intel/pailliercryptolib) and install it to `${IPCL_INSTALL_DIR}`.
+By default, the Paillier cryptosystem is a generic implementation that uses the GMP library.
+For power users who seek extreme performance on supported processors, we provide the option to switch to the IPCL-based implementation.
+To use the IPCL-based Paillier, follow instructions of [Intel Paillier Cryptosystem Library](https://github.com/intel/pailliercryptolib) and install it to `${IPCL_INSTALL_DIR}`.
 We recommend the commit `495beaad1f6e70741f2b5cf1279cb919fd66d894` instead of v2.0.0.
 Build PETAce-Solo library with extra configuration:
+
 ```bash
 cmake -S . -B build -DSOLO_USE_IPCL=ON -DIPCL_DIR=${IPCL_INSTALL_DIR}/lib/cmake/ipcl-2.0.0
 ```
@@ -75,14 +79,14 @@ This project is licensed under the [Apache-2.0 License](LICENSE).
 
 To cite PETAce in academic papers, please use the following BibTeX entries.
 
-### Version 0.2.0
+### Version 0.3.0
 
 ```tex
     @misc{petace,
-        title = {PETAce (release 0.2.0)},
+        title = {PETAce (release 0.3.0)},
         howpublished = {\url{https://github.com/tiktok-privacy-innovation/PETAce}},
-        month = Oct,
-        year = 2023,
+        month = Jun,
+        year = 2024,
         note = {TikTok Pte. Ltd.},
         key = {PETAce}
     }

@@ -35,11 +35,15 @@ void bm_hash_blake2(benchmark::State& state, petace::solo::Byte value);
 // PRNG benchmark cases
 void bm_prng_shake_128(benchmark::State& state, std::size_t byte_count);
 void bm_prng_blake2x(benchmark::State& state, std::size_t byte_count);
+#ifdef SOLO_USE_AES_INTRIN
 void bm_prng_aes_ctr(benchmark::State& state, std::size_t byte_count);
+#endif
 // Sampling benchmark cases
 void bm_sample_uniform_byte_array_shake_128(benchmark::State& state, std::size_t byte_count);
 void bm_sample_uniform_byte_array_blake2x(benchmark::State& state, std::size_t byte_count);
+#ifdef SOLO_USE_AES_INTRIN
 void bm_sample_uniform_byte_array_aes_ctr(benchmark::State& state, std::size_t byte_count);
+#endif
 // EC OpenSSL benchmark cases
 void bm_ec_hash_to_curve(benchmark::State& state, petace::solo::Byte value);
 void bm_ec_encrypt(benchmark::State& state, petace::solo::Byte value);

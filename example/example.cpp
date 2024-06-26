@@ -92,8 +92,8 @@ void example_sampling() {
               << std::endl;
 
     std::cout << std::endl;
-    std::cout << "Use AES_ECB_CTR to create our PRNG" << std::endl;
-    petace::solo::PRNGFactory prng_factory(petace::solo::PRNGScheme::AES_ECB_CTR, seed.size());
+    std::cout << "Use BLAKE2Xb to create our PRNG" << std::endl;
+    petace::solo::PRNGFactory prng_factory(petace::solo::PRNGScheme::BLAKE2Xb, seed.size());
     auto prng = prng_factory.create(seed);
 
     std::cout << "    Generate a random 32-bit unsigned integer: " << sample_uniform_uint32(*prng) << std::endl;

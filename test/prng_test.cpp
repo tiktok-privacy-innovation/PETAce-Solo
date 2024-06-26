@@ -112,6 +112,7 @@ TEST(PRNGTest, PRNG) {
         ASSERT_EQ(prng->seed(), seed);
     }
 #endif
+#ifdef SOLO_USE_AES_INTRIN
     {
         ASSERT_THROW(
                 petace::solo::PRNGImpl<petace::solo::PRNGScheme::AES_ECB_CTR>(std::size_t(0)), std::invalid_argument);
@@ -157,5 +158,6 @@ TEST(PRNGTest, PRNG) {
         auto prng = prng_factory.create();
         ASSERT_EQ(prng->seed(), seed);
     }
+#endif
 #endif
 }

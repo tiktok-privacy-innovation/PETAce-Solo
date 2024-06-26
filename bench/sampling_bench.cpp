@@ -43,6 +43,7 @@ void bm_sample_uniform_byte_array_blake2x(benchmark::State& state, std::size_t b
     }
 }
 
+#ifdef SOLO_USE_AES_INTRIN
 void bm_sample_uniform_byte_array_aes_ctr(benchmark::State& state, std::size_t byte_count) {
     std::vector<petace::solo::Byte> output(byte_count);
     petace::solo::PRNGFactory prng_factory(petace::solo::PRNGScheme::AES_ECB_CTR, kSeedByteCount);
@@ -54,3 +55,4 @@ void bm_sample_uniform_byte_array_aes_ctr(benchmark::State& state, std::size_t b
         sample_uniform_byte_array(*prng, byte_count, output.data());
     }
 }
+#endif

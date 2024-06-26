@@ -15,3 +15,9 @@
 
 - Added hashing tables: Cuckoo hashing and simple hashing.
 - Added partially homomorphic encryption: the Paillier cryptosystem.
+
+## Version 0.3.0
+
+### Features
+
+- Added a GMP-based generic implementation of the Paillier cryptosystem.

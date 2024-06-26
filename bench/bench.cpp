@@ -28,10 +28,14 @@ int main(int argc, char** argv) {
     PETACE_REG_BENCH(Hash, BLAKE2, bm_hash_blake2, petace::solo::Byte(0));
     PETACE_REG_BENCH(petace::solo::PRNG, SHAKE_128, bm_prng_shake_128, std::size_t(4096));
     PETACE_REG_BENCH(petace::solo::PRNG, BLAKE2X, bm_prng_blake2x, std::size_t(4096));
+#ifdef SOLO_USE_AES_INTRIN
     PETACE_REG_BENCH(petace::solo::PRNG, AES_ECB_CTR, bm_prng_aes_ctr, std::size_t(4096));
+#endif
     PETACE_REG_BENCH(Sampling, UNIFORM_BYTE_ARRAY_SHAKE_128, bm_sample_uniform_byte_array_shake_128, std::size_t(4096));
     PETACE_REG_BENCH(Sampling, UNIFORM_BYTE_ARRAY_BLAKE2X, bm_sample_uniform_byte_array_blake2x, std::size_t(4096));
+#ifdef SOLO_USE_AES_INTRIN
     PETACE_REG_BENCH(Sampling, UNIFORM_BYTE_ARRAY_AES_ECB_CTR, bm_sample_uniform_byte_array_aes_ctr, std::size_t(4096));
+#endif
     PETACE_REG_BENCH(EC_OpenSSL, hash_to_curve, bm_ec_hash_to_curve, petace::solo::Byte(0));
     PETACE_REG_BENCH(EC_OpenSSL, encrypt, bm_ec_encrypt, petace::solo::Byte(0));
     PETACE_REG_BENCH(EC_OpenSSL, decrypt, bm_ec_decrypt, petace::solo::Byte(0));
