@@ -1,5 +1,7 @@
 # PETAce-Solo
 
+<!-- start-petace-solo-overview -->
+
 PETAce-Solo is a C++ library that implements or wraps primitive cryptography schemes.
 It is one of the many components in [the framework PETAce](https://github.com/tiktok-privacy-innovation/PETAce).
 
@@ -11,7 +13,11 @@ PETAce-Solo implements or wraps the following primitives that involves only one 
 - Hashing tables: Cuckoo hashing and simple hashing.
 - Partially homomorphic encryption: the Paillier cryptosystem.
 
+<!-- end-petace-solo-overview -->
+
 ## Requirements
+
+<!-- start-petace-solo-getting-started -->
 
 | System | Toolchain                                             |
 |--------|-------------------------------------------------------|
@@ -62,6 +68,7 @@ Build PETAce-Solo library with extra configuration:
 ```bash
 cmake -S . -B build -DSOLO_USE_IPCL=ON -DIPCL_DIR=${IPCL_INSTALL_DIR}/lib/cmake/ipcl-2.0.0
 ```
+<!-- end-petace-solo-getting-started -->
 
 ## Contribution
 
